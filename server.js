@@ -12,7 +12,7 @@ app.use(bodyParser.json());
  * DATABASE *
  ************/
 
-// var db = require('./models');
+var db = require('./models');
 
 /**********
  * ROUTES *
@@ -38,17 +38,91 @@ app.get('/', function homepage(req, res) {
 app.get('/api', function api_index(req, res) {
   // TODO: Document all your api endpoints below
   res.json({
-    woops_i_has_forgot_to_document_all_my_endpoints: true, // CHANGE ME ;)
+    name: "Alex Creighton", // CHANGEd
     message: "Welcome to my personal api! Here's what you need to know!",
-    documentation_url: "https://github.com/example-username/express_self_api/README.md", // CHANGE ME
-    base_url: "http://YOUR-APP-NAME.herokuapp.com", // CHANGE ME
+    github_link: "https://github.com/Alexandroidd", // CHANGE ME
+    base_url: "https://dry-river-12525.herokuapp.com/", // CHANGED
+
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
-      {method: "POST", path: "/api/campsites", description: "E.g. Create a new campsite"} // CHANGE ME
+      {method: "POST", path: "/api/surfsites", description: "E.g. Create a new campsite"} // CHANGE ME
     ]
-  })
+  });
 });
+
+
+app.get('/api/profile', function index(req, res) {
+  res.json({
+    name: "Alex Creighton",
+    current_city: "Denver",
+    pets: [
+    {
+      name: 'Yoda',
+      type: 'goldfish',
+      breed: 'Ancient Goldfish'
+    }],
+  });
+
+});
+
+//Get All: Index Route---//
+
+app.get('/api/profile/surfsites', function index(req, res) {
+  db.Surfsite.find(function(err, surfsites) {                       //why here is it db.Surfsite (capitalized?) what is this referring to???
+    if (err) {return console.log("index error:" + err);}
+  res.json(surfsites);
+  });
+});
+//-----
+
+//Get One: Show Route----//
+
+app.get('/api/profile/surfsites/:id', function show(req, res) {
+  var surfId = req.params.id;
+  db.Surfsite.findOne({'_id': surfId}, function (err, surfsite){
+  if (err) {return console.log('index error:' + err);}
+  res.json(surfsite);
+  });
+});
+//------
+
+//POST: CREATE ROUTE --//
+
+app.post('/api/profile/surfsites/', function create(req, res) {
+  var newSite = new db.Surfsite({
+    name: req.body.name,
+    location: req.body.location,
+    bottom: req.body.bottom,
+    shark_danger: req.body.shark_danger
+  });
+
+  newSite.save(function(err, site) {                        //IN THIS ONE, DO I HAVE TO 
+    if (err) {return console.log("create error:" + err);}  //REFER THE NEWLY CREATED SITE BY THE NAME
+    console.log('created site, ' + site.name);             //SITE? OR CAN I USE newSite from above??
+    res.json(site);
+  });
+});
+//--------
+
+//PUT: UPDATE ROUTE --//
+
+app.put('/api/profile/surfsites/:id', function update(req, res) {
+  var surfId = req.params.id;
+  db.Surfsite.findOne({'_id': surfId}, function(err,surfsite){
+    if (err) {return console.log('update error:' + err);}
+    surfsite.name = req.body.name;
+    surfsite.location = req.body.location;
+    surfsite.bottom = req.body.bottom;
+    surfsite.shark_danger = req.body.shark_danger;
+
+    surfsite.save(function(err, surfsite){
+      if (err) {return console.log('save error:' + err);}
+      res.json(surfsite);
+    });
+  });
+});
+
 
 /**********
  * SERVER *
