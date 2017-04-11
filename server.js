@@ -46,7 +46,11 @@ app.get('/api', function api_index(req, res) {
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
-      {method: "POST", path: "/api/surfsites", description: "E.g. Create a new campsite"} // CHANGE ME
+      {method: "GET", path: "/api/surfsites", description: "Where you'll find surf spot info"},
+      {method: "GET", path: "/api/surfsites/:id", description: "Find individual surf spots"},
+      {method: "POST", path: "/api/surfsites", description: 'Add your own surfspot!'},
+      {method: "PUT", path: "/api/surfsites/:id", description: 'Edit surfspots here'},
+      {method: "DELETE", path: "/api/surfsites/:id", description: 'Use this endpoint to delete a surfspot if you don"t want the kooks showing up!'} // CHANGE ME
     ]
   });
 });
