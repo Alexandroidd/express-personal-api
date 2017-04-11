@@ -123,6 +123,14 @@ app.put('/api/profile/surfsites/:id', function update(req, res) {
   });
 });
 
+app.delete('/api/profile/surfsites/:id', function destroy(req, res) {
+  var surfId = req.params.id;
+  db.Surfsite.remove({'_id': surfId}, function(err, surfsite) {
+    if (err) {return console.log('remove error: ' + err);}
+    res.json(db.Surfsite);
+  });
+});
+
 
 /**********
  * SERVER *
