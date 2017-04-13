@@ -59,20 +59,15 @@ app.get('/api', function api_index(req, res) {
 app.get('/api/profile', function index(req, res) {
   res.json({
     name: "Alex Creighton",
-    current_city: "Denver",
-    pets: [
-    {
-      name: 'Yoda',
-      type: 'goldfish',
-      breed: 'Ancient Goldfish'
-    }],
+    description: "I made this app for people to save their fav surf spots!"
+  
   });
 
 });
 
 //Get All: Index Route---//
 
-app.get('/api/profile/surfsites', function index(req, res) {
+app.get('/api/surfsites', function index(req, res) {
   db.Surfsite.find(function(err, surfsites) {                       //why here is it db.Surfsite (capitalized?) what is this referring to???
     if (err) {return console.log("index error:" + err);}
   res.json(surfsites);
@@ -82,7 +77,7 @@ app.get('/api/profile/surfsites', function index(req, res) {
 
 //Get One: Show Route----//
 
-app.get('/api/profile/surfsites/:id', function show(req, res) {
+app.get('/api/surfsites/:id', function show(req, res) {
   var surfId = req.params.id;
   db.Surfsite.findOne({'_id': surfId}, function (err, surfsite){
   if (err) {return console.log('index error:' + err);}
@@ -93,7 +88,7 @@ app.get('/api/profile/surfsites/:id', function show(req, res) {
 
 //POST: CREATE ROUTE --//
 
-app.post('/api/profile/surfsites/', function create(req, res) {
+app.post('/api/surfsites', function create(req, res) {
   var newSite = new db.Surfsite({
     name: req.body.name,
     location: req.body.location,
@@ -111,7 +106,7 @@ app.post('/api/profile/surfsites/', function create(req, res) {
 
 //PUT: UPDATE ROUTE --//
 
-app.put('/api/profile/surfsites/:id', function update(req, res) {
+app.put('/api/surfsites/:id', function update(req, res) {
   var surfId = req.params.id;
   db.Surfsite.findOne({'_id': surfId}, function(err,surfsite){
     if (err) {return console.log('update error:' + err);}
@@ -127,7 +122,8 @@ app.put('/api/profile/surfsites/:id', function update(req, res) {
   });
 });
 
-app.delete('/api/profile/surfsites/:id', function destroy(req, res) {
+
+app.delete('/api/surfsites/:id', function destroy(req, res) {
   var surfId = req.params.id;
   db.Surfsite.remove({'_id': surfId}, function(err, surfsite) {
     if (err) {return console.log('remove error: ' + err);}
